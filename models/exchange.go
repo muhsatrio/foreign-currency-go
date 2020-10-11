@@ -12,5 +12,4 @@ type Exchange struct {
 	To     string
 	Value  float64
 	RateID uint
-	Rate   Rate `gorm:"references:ID"`
 }

@@ -24,22 +24,24 @@ func RateCreate(w http.ResponseWriter, r *http.Request) {
 
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
 	}
 
-	exchange := models.Exchange{
+	rate := models.Rate{
 		From: body.From,
 		To:   body.To,
 	}
 
-	result := db.DB.Create(&exchange)
+	result := db.DB.Create(&rate)
 
 	if result.Error != nil {
 		http.Error(w, result.Error.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusAccepted)
 	json.NewEncoder(w).Encode(responseRate{
-		ID: exchange.ID,
+		ID: rate.ID,
 	})
 }

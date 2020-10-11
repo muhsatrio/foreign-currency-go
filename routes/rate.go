@@ -1,14 +1,18 @@
 package routes
 
-import "net/http"
+import (
+	"foreign-currency-go/controllers"
+	"net/http"
+)
 
 func rateRoutes(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
-		w.Write([]byte("POST /rate"))
+		controllers.RateCreate(w, r)
 	case "DELETE":
 		w.Write([]byte("DELETE /rate"))
 	default:
 		http.Error(w, "Not Implemented", http.StatusBadRequest)
+		return
 	}
 }

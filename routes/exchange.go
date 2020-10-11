@@ -13,5 +13,6 @@ func exchangeRoutes(w http.ResponseWriter, r *http.Request) {
 		controllers.ExchangeCreate(w, r)
 	default:
 		http.Error(w, "Not Implemented", http.StatusBadRequest)
+		return
 	}
 }
