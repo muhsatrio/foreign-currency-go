@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"foreign-currency-go/db"
 	"foreign-currency-go/models"
+	"foreign-currency-go/utils"
 	"net/http"
 )
 
@@ -23,7 +24,9 @@ func RateCreate(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&body)
 
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		utils.BadRequestMessage(w, utils.ResponseError{
+			Error: err.Error(),
+		})
 		return
 	}
 
@@ -35,13 +38,13 @@ func RateCreate(w http.ResponseWriter, r *http.Request) {
 	result := db.DB.Create(&rate)
 
 	if result.Error != nil {
-		http.Error(w, result.Error.Error(), http.StatusInternalServerError)
+		utils.InternalServerErrorMessage(w, utils.ResponseError{
+			Error: result.Error.Error(),
+		})
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusAccepted)
-	json.NewEncoder(w).Encode(responseRate{
+	utils.CreatedMessage(w, utils.ResponseCreated{
 		ID: rate.ID,
 	})
 }

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"foreign-currency-go/db"
 	"foreign-currency-go/models"
+	"foreign-currency-go/utils"
 	"net/http"
 )
 
@@ -14,25 +15,35 @@ type reqBodyExchange struct {
 	Rate float64 `json:"rate"`
 }
 
-type responseExchange struct {
-	ID uint `json:"id"`
-}
-
 // ExchangeCreate func
 func ExchangeCreate(w http.ResponseWriter, r *http.Request) {
 	var body reqBodyExchange
 	var rate models.Rate
+
 	err := json.NewDecoder(r.Body).Decode(&body)
 
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		utils.BadRequestMessage(w, utils.ResponseError{
+			Error: err.Error(),
+		})
 		return
 	}
 
 	result := db.DB.Where(&models.Rate{From: body.From, To: body.To}).First(&rate)
 
 	if result.Error != nil {
-		http.Error(w, "Rate Not Found", http.StatusBadRequest)
+		utils.BadRequestMessage(w, utils.ResponseError{
+			Error: result.Error.Error(),
+		})
+		return
+	}
+
+	result = db.DB.Where(&models.Exchange{Date: body.Date, From: body.From, To: body.To}).Find(&models.Exchange{})
+
+	if result.RowsAffected > 0 {
+		utils.BadRequestMessage(w, utils.ResponseError{
+			Error: "Rate on inputed Date has been exist",
+		})
 		return
 	}
 
@@ -47,13 +58,13 @@ func ExchangeCreate(w http.ResponseWriter, r *http.Request) {
 	result = db.DB.Create(&exchange)
 
 	if result.Error != nil {
-		http.Error(w, result.Error.Error(), http.StatusInternalServerError)
+		utils.InternalServerErrorMessage(w, utils.ResponseError{
+			Error: result.Error.Error(),
+		})
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusAccepted)
-	json.NewEncoder(w).Encode(responseExchange{
+	utils.CreatedMessage(w, utils.ResponseCreated{
 		ID: exchange.ID,
 	})
 }
