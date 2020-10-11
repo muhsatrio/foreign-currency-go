@@ -22,6 +22,12 @@ func CreatedMessage(w http.ResponseWriter, r ResponseCreated) {
 	json.NewEncoder(w).Encode(r)
 }
 
+// DeletedMessage func
+func DeletedMessage(w http.ResponseWriter) {
+	w.WriteHeader(http.StatusNoContent)
+	w.Write([]byte(""))
+}
+
 // BadRequestMessage func
 func BadRequestMessage(w http.ResponseWriter, r ResponseError) {
 	w.Header().Set("Content-Type", "application/json")

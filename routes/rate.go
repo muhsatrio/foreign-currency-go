@@ -10,7 +10,7 @@ func rateRoutes(w http.ResponseWriter, r *http.Request) {
 	case "POST":
 		controllers.RateCreate(w, r)
 	case "DELETE":
-		w.Write([]byte("DELETE /rate"))
+		controllers.RateDelete(w, r)
 	default:
 		http.Error(w, "Not Implemented", http.StatusBadRequest)
 		return

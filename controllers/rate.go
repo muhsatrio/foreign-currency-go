@@ -9,3 +9,8 @@ import (
 func RateCreate(w http.ResponseWriter, r *http.Request) {
 	rate.Create(w, r)
 }
+
+// RateDelete func
+func RateDelete(w http.ResponseWriter, r *http.Request) {
+	rate.Delete(w, r)
+}
