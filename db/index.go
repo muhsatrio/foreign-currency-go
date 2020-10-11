@@ -29,8 +29,8 @@ func Init() {
 		panic("Failed to connect to database")
 	}
 
-	db.AutoMigrate(&models.Exchange{})
 	db.AutoMigrate(&models.Rate{})
+	db.AutoMigrate(&models.Exchange{})
 
 	DB = db
 }
