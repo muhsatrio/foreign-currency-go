@@ -7,7 +7,7 @@ import (
 // Rate struct
 type Rate struct {
 	gorm.Model
-	From     string     `json:"from"`
-	To       string     `json:"to"`
-	Exchange []Exchange `json:"exchanges" gorm:"foreignKey:From"`
+	From      string
+	To        string
+	Exchanges []Exchange `gorm:"foreignKey:RateID;references:ID"`
 }
