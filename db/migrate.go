@@ -17,7 +17,13 @@ func Migrate(db *gorm.DB) {
 		{
 			ID: "1",
 			Migrate: func(tx *gorm.DB) error {
-				return db.AutoMigrate(&models.Rate{})
+				type Rate struct {
+					gorm.Model
+					From     string
+					To       string
+					Exchange []models.Exchange `gorm:"foreignKey:RateID;OnUpdate:CASCADE,OnDelete:CASCADE;"`
+				}
+				return db.AutoMigrate(&Rate{})
 			},
 			Rollback: func(tx *gorm.DB) error {
 				return tx.Migrator().DropTable("rate")
@@ -26,7 +32,15 @@ func Migrate(db *gorm.DB) {
 		{
 			ID: "2",
 			Migrate: func(tx *gorm.DB) error {
-				return db.AutoMigrate(&models.Exchange{})
+				type Exchange struct {
+					gorm.Model
+					Date   string
+					From   string
+					To     string
+					Value  float64
+					RateID uint
+				}
+				return db.AutoMigrate(&Exchange{})
 			},
 			Rollback: func(tx *gorm.DB) error {
 				return tx.Migrator().DropTable("exchange")
