@@ -15,7 +15,7 @@ var Migration *gormigrate.Gormigrate
 func Migrate(db *gorm.DB) {
 	m := gormigrate.New(db, gormigrate.DefaultOptions, []*gormigrate.Migration{
 		{
-			ID: "1",
+			ID: "202010141958",
 			Migrate: func(tx *gorm.DB) error {
 				type Rate struct {
 					gorm.Model
@@ -30,7 +30,7 @@ func Migrate(db *gorm.DB) {
 			},
 		},
 		{
-			ID: "2",
+			ID: "202010141959",
 			Migrate: func(tx *gorm.DB) error {
 				type Exchange struct {
 					gorm.Model
