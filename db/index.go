@@ -1,7 +1,6 @@
 package db
 
 import (
-	"foreign-currency-go/models"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -29,8 +28,7 @@ func Init() {
 		panic("Failed to connect to database")
 	}
 
-	db.AutoMigrate(&models.Rate{})
-	db.AutoMigrate(&models.Exchange{})
+	Migrate(db)
 
 	DB = db
 }
