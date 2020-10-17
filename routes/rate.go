@@ -2,6 +2,7 @@ package routes
 
 import (
 	"foreign-currency-go/rate"
+	"foreign-currency-go/utils"
 	"net/http"
 )
 
@@ -12,7 +13,7 @@ func rateRoutes(w http.ResponseWriter, r *http.Request) {
 	case "DELETE":
 		rate.ControllerDelete(w, r)
 	default:
-		http.Error(w, "Not Implemented", http.StatusBadRequest)
+		utils.ResponseError{Error: "Not Implemented"}.BadRequestMessage(w)
 		return
 	}
 }

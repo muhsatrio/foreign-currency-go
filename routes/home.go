@@ -1,13 +1,16 @@
 package routes
 
-import "net/http"
+import (
+	"foreign-currency-go/utils"
+	"net/http"
+)
 
 func homeRoutes(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
 		w.Write([]byte("API is Running"))
 	default:
-		http.Error(w, "Not Implemented", http.StatusBadRequest)
+		utils.ResponseError{Error: "Not Implemented"}.BadRequestMessage(w)
 		return
 	}
 }

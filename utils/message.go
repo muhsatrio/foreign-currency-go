@@ -16,7 +16,7 @@ type ResponseError struct {
 }
 
 // CreatedMessage func
-func CreatedMessage(w http.ResponseWriter, r ResponseCreated) {
+func (r ResponseCreated) CreatedMessage(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(r)
@@ -29,15 +29,22 @@ func DeletedMessage(w http.ResponseWriter) {
 }
 
 // BadRequestMessage func
-func BadRequestMessage(w http.ResponseWriter, r ResponseError) {
+func (r ResponseError) BadRequestMessage(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusBadRequest)
 	json.NewEncoder(w).Encode(r)
 }
 
 // InternalServerErrorMessage func
-func InternalServerErrorMessage(w http.ResponseWriter, r ResponseError) {
+func (r ResponseError) InternalServerErrorMessage(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusInternalServerError)
+	json.NewEncoder(w).Encode(r)
+}
+
+// NotFoundMessage func
+func (r ResponseError) NotFoundMessage(w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusNotFound)
 	json.NewEncoder(w).Encode(r)
 }

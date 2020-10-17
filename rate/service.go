@@ -23,15 +23,12 @@ func (body ReqBodyCreate) serviceCreate(w http.ResponseWriter) error {
 	result := db.DB.Create(&rate)
 
 	if result.Error != nil {
-		utils.InternalServerErrorMessage(w, utils.ResponseError{
-			Error: result.Error.Error(),
-		})
+		utils.ResponseError{Error: result.Error.Error()}.InternalServerErrorMessage(w)
+
 		return result.Error
 	}
 
-	utils.CreatedMessage(w, utils.ResponseCreated{
-		ID: rate.ID,
-	})
+	utils.ResponseCreated{ID: rate.ID}.CreatedMessage(w)
 
 	return nil
 }
@@ -46,9 +43,7 @@ func (body ReqBodyDelete) serviceDelete(w http.ResponseWriter) error {
 	result := db.DB.Delete(&models.Rate{}, body.ID)
 
 	if result.Error != nil {
-		utils.InternalServerErrorMessage(w, utils.ResponseError{
-			Error: result.Error.Error(),
-		})
+		utils.ResponseError{Error: result.Error.Error()}.InternalServerErrorMessage(w)
 		return result.Error
 	}
 

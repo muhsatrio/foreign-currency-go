@@ -2,6 +2,7 @@ package routes
 
 import (
 	"foreign-currency-go/exchange"
+	"foreign-currency-go/utils"
 	"net/http"
 )
 
@@ -12,6 +13,7 @@ func exchangeRoutes(w http.ResponseWriter, r *http.Request) {
 	case "POST":
 		exchange.ControllerCreate(w, r)
 	default:
-		http.Error(w, "Not Implemented", http.StatusBadRequest)
+		utils.ResponseError{Error: "Not Implemented"}.BadRequestMessage(w)
+		return
 	}
 }

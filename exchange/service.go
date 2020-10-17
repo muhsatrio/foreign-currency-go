@@ -24,18 +24,14 @@ func (body ReqBodyCreate) serviceCreate(w http.ResponseWriter) error {
 	result := db.DB.Where(&models.Rate{From: body.From, To: body.To}).First(&rate)
 
 	if result.Error != nil {
-		utils.BadRequestMessage(w, utils.ResponseError{
-			Error: result.Error.Error(),
-		})
+		utils.ResponseError{Error: "Rate not found"}.NotFoundMessage(w)
 		return result.Error
 	}
 
 	result = db.DB.Where(&models.Exchange{Date: body.Date, From: body.From, To: body.To}).Find(&models.Exchange{})
 
 	if result.RowsAffected > 0 {
-		utils.BadRequestMessage(w, utils.ResponseError{
-			Error: "Rate on inputed Date has been exist",
-		})
+		utils.ResponseError{Error: "Rate on inputed Date has been exist"}.BadRequestMessage(w)
 		return errors.New("Rate on inputed Date has been exist")
 	}
 
@@ -50,15 +46,12 @@ func (body ReqBodyCreate) serviceCreate(w http.ResponseWriter) error {
 	result = db.DB.Create(&exchange)
 
 	if result.Error != nil {
-		utils.InternalServerErrorMessage(w, utils.ResponseError{
-			Error: result.Error.Error(),
-		})
+		utils.ResponseError{Error: result.Error.Error()}.InternalServerErrorMessage(w)
+
 		return result.Error
 	}
 
-	utils.CreatedMessage(w, utils.ResponseCreated{
-		ID: exchange.ID,
-	})
+	utils.ResponseCreated{ID: exchange.ID}.CreatedMessage(w)
 
 	return nil
 }

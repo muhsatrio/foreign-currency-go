@@ -11,9 +11,7 @@ func ControllerCreate(w http.ResponseWriter, r *http.Request) error {
 	var body ReqBodyCreate
 	err := json.NewDecoder(r.Body).Decode(&body)
 	if err != nil {
-		utils.BadRequestMessage(w, utils.ResponseError{
-			Error: err.Error(),
-		})
+		utils.ResponseError{Error: err.Error()}.BadRequestMessage(w)
 		return err
 	}
 
