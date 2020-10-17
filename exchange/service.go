@@ -23,8 +23,13 @@ func (body ReqBodyCreate) serviceCreate(w http.ResponseWriter) error {
 
 	result := db.DB.Where(&models.Rate{From: body.From, To: body.To}).First(&rate)
 
-	if result.Error != nil {
+	if result.RowsAffected <= 0 {
 		utils.ResponseError{Error: "Rate not found"}.NotFoundMessage(w)
+		return errors.New("Rate not found")
+	}
+
+	if result.Error != nil {
+		utils.ResponseError{Error: result.Error.Error()}.BadRequestMessage(w)
 		return result.Error
 	}
 

@@ -1,6 +1,7 @@
 package rate
 
 import (
+	"errors"
 	"foreign-currency-go/db"
 	"foreign-currency-go/models"
 	"foreign-currency-go/utils"
@@ -15,12 +16,19 @@ type ReqBodyCreate struct {
 
 func (body ReqBodyCreate) serviceCreate(w http.ResponseWriter) error {
 
+	result := db.DB.Where(&models.Rate{From: body.From, To: body.To}).Find(&models.Rate{})
+
+	if result.RowsAffected > 0 {
+		utils.ResponseError{Error: "Rate inputed has been exist"}.BadRequestMessage(w)
+		return errors.New("Rate inputed has been exist")
+	}
+
 	rate := models.Rate{
 		From: body.From,
 		To:   body.To,
 	}
 
-	result := db.DB.Create(&rate)
+	result = db.DB.Create(&rate)
 
 	if result.Error != nil {
 		utils.ResponseError{Error: result.Error.Error()}.InternalServerErrorMessage(w)
