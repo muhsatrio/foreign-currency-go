@@ -52,7 +52,8 @@ func Migrate(db *gorm.DB) error {
 
 	if err != nil {
 		log.Fatalln("Failed to migrate: ", err)
+		return err
 	}
 
-	return err
+	return nil
 }
