@@ -14,12 +14,13 @@ import (
 var DB *gorm.DB
 
 // Init func
-func Init() {
+func Init() error {
 
 	err := godotenv.Load()
 
 	if err != nil {
 		log.Fatalln("Please create .env first!")
+		return err
 	}
 
 	dsn := os.Getenv("DB_USERNAME") + ":" + os.Getenv("DB_PASSWORD") + "@tcp(127.0.0.1:3306)/" + os.Getenv("DB_DATABASE") + "?charset=utf8mb4&parseTime=True&loc=Local"
@@ -27,9 +28,12 @@ func Init() {
 
 	if err != nil {
 		log.Fatalln("Failed to connect to database: ", err)
+		return err
 	}
 
 	Migrate(db)
 
 	DB = db
+
+	return err
 }

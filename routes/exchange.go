@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"foreign-currency-go/controllers"
+	"foreign-currency-go/exchange"
 	"net/http"
 )
 
@@ -10,9 +10,8 @@ func exchangeRoutes(w http.ResponseWriter, r *http.Request) {
 	case "GET":
 		w.Write([]byte("GET /exchange"))
 	case "POST":
-		controllers.ExchangeCreate(w, r)
+		exchange.ControllerCreate(w, r)
 	default:
 		http.Error(w, "Not Implemented", http.StatusBadRequest)
-		return
 	}
 }

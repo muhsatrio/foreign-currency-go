@@ -1,33 +1,25 @@
 package exchange
 
 import (
-	"encoding/json"
+	"errors"
 	"foreign-currency-go/db"
 	"foreign-currency-go/models"
 	"foreign-currency-go/utils"
 	"net/http"
 )
 
-type reqBody struct {
+var w http.ResponseWriter
+
+// ReqBodyCreate struct
+type ReqBodyCreate struct {
 	Date string  `json:"date"`
 	From string  `json:"from"`
 	To   string  `json:"to"`
 	Rate float64 `json:"rate"`
 }
 
-// Create func
-func Create(w http.ResponseWriter, r *http.Request) {
-	var body reqBody
+func (body ReqBodyCreate) serviceCreate(w http.ResponseWriter) error {
 	var rate models.Rate
-
-	err := json.NewDecoder(r.Body).Decode(&body)
-
-	if err != nil {
-		utils.BadRequestMessage(w, utils.ResponseError{
-			Error: err.Error(),
-		})
-		return
-	}
 
 	result := db.DB.Where(&models.Rate{From: body.From, To: body.To}).First(&rate)
 
@@ -35,7 +27,7 @@ func Create(w http.ResponseWriter, r *http.Request) {
 		utils.BadRequestMessage(w, utils.ResponseError{
 			Error: result.Error.Error(),
 		})
-		return
+		return result.Error
 	}
 
 	result = db.DB.Where(&models.Exchange{Date: body.Date, From: body.From, To: body.To}).Find(&models.Exchange{})
@@ -44,7 +36,7 @@ func Create(w http.ResponseWriter, r *http.Request) {
 		utils.BadRequestMessage(w, utils.ResponseError{
 			Error: "Rate on inputed Date has been exist",
 		})
-		return
+		return errors.New("Rate on inputed Date has been exist")
 	}
 
 	exchange := models.Exchange{
@@ -61,10 +53,12 @@ func Create(w http.ResponseWriter, r *http.Request) {
 		utils.InternalServerErrorMessage(w, utils.ResponseError{
 			Error: result.Error.Error(),
 		})
-		return
+		return result.Error
 	}
 
 	utils.CreatedMessage(w, utils.ResponseCreated{
 		ID: exchange.ID,
 	})
+
+	return nil
 }

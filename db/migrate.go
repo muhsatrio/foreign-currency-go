@@ -12,7 +12,7 @@ import (
 var Migration *gormigrate.Gormigrate
 
 // Migrate func
-func Migrate(db *gorm.DB) {
+func Migrate(db *gorm.DB) error {
 	m := gormigrate.New(db, gormigrate.DefaultOptions, []*gormigrate.Migration{
 		{
 			ID: "202010141958",
@@ -48,7 +48,11 @@ func Migrate(db *gorm.DB) {
 		},
 	})
 
-	if err := m.Migrate(); err != nil {
+	err := m.Migrate()
+
+	if err != nil {
 		log.Fatalln("Failed to migrate: ", err)
 	}
+
+	return err
 }
