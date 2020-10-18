@@ -1,9 +1,9 @@
-# Requirement
+## Requirement
 
 - [Go](https://golang.org/doc/install)
 - [MySQL](https://www.mysql.com/downloads/)
 
-# How to Run
+## How to Run
 
 1. Make sure `Go` and `MySQL` had been installed and running
 2. Type `go mod download` to install packages that needed
