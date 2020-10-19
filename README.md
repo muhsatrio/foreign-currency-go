@@ -3,6 +3,16 @@
 - [Go](https://golang.org/doc/install)
 - [MySQL](https://www.mysql.com/downloads/)
 
+## Requirement
+
+Create `.env` file with detail below
+
+```
+DB_USERNAME=(your database username)
+DB_PASSWORD=(your database password)
+DB_DATABASE=(your database name)
+```
+
 ## How to Run
 
 1. Make sure `Go` and `MySQL` had been installed and running
